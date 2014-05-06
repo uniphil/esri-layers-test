@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>stuff</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+    <style>
+      body {
+        color: #ccc;
+        background: #444;
+        font-family: sans-serif;
+      }
+      .page {
+        width: 80%;
+        margin: 3em auto;
+      }
+      #map {
+        height: 480px;
+      }
+      a {
+        color: #f66;
+      }
+      ul, li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      li h2 {
+        font-size: 1.1em;
+        display: inline-block;
+        margin: 0.5em 1em 0 0;
+      }
+      li a {
+        text-decoration: none;
+        font-size: 0.8em;
+      }
+      li p {
+        margin: 0.5em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div id="map">
+      </div>
+      <h1>Problem layers</h1>
+      <ul class="problems">
+        <li data-layer-url="http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query?geometryPrecision=4&f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=102100">
+          <h2>Chile</h2>
+          <a href="#show-layer">show layer</a>
+          <p>Loads too far west</p>
+        </li>
+      </ul>
+    </div>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+    <script src="esri-leaflet.js"></script>
+    <script>
+      var map = L.map('map').setView([0, 0], 1);
+      L.tileLayer('http://{s}.tiles.mapbox.com/v3/pschleihauf.i2b0g6ph/{z}/{x}/{y}.png', {
+        attribution: 'la la la',
+        maxZoom: 20
+      }).addTo(map);
+      L.esri.featureLayer('http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query?geometryPrecision=4&f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=102100', {
+        style: function(feature) {
+          return {color: '#f00'};
+        }
+      }).addTo(map);
+    </script>
+  </body>
+</html>
