@@ -55,6 +55,8 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
     <script src="esri-leaflet.js"></script>
     <script>
+      L.esri.get = L.esri.RequestHandlers.JSONP;
+
       var map = L.map('map').setView([0, 0], 1);
       L.tileLayer('http://{s}.tiles.mapbox.com/v3/pschleihauf.i2b0g6ph/{z}/{x}/{y}.png', {
         attribution: 'la la la',
@@ -69,18 +71,22 @@
         }
         currentLayer = L.esri.featureLayer(url, {style: function() {
           return {color: '#f05'};
-        }});
+        }}).on('loading', function() {
+          console.log('loading...')
+        }).on('load', function() {
+          console.log('loaded')
+        });
         currentLayer.addTo(map);
       }
-      var layerLinks = document.querySelectorAll('[href="#show-layer"]');
+      // var layerLinks = document.querySelectorAll('[href="#show-layer"]');
 
 
-      Array.forEach.call(layerLinks, function(thing) {
-        console.log(thing);
-      });
-      layerLinks.onclick = function() { console.log('lalala') };
+      // Array.forEach.call(layerLinks, function(thing) {
+      //   console.log(thing);
+      // });
+      // layerLinks.onclick = function() { console.log('lalala') };
 
-      showLayer('http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query?geometryPrecision=4&f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=102100');
+      showLayer('http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query');
     </script>
   </body>
 </html>
