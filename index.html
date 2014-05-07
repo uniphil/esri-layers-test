@@ -43,12 +43,21 @@
     <div class="page">
       <div id="map">
       </div>
-      <h1>Problem layers</h1>
       <ul class="problems">
-        <li data-layer-url="http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query?geometryPrecision=4&f=json&where=1%3D1&returnGeometry=true&spatialRel=esriSpatialRelIntersects&outFields=*&outSR=102100">
+        <li data-layerurl="http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query">
           <h2>Chile</h2>
           <a href="#show-layer">show layer</a>
           <p>Loads too far west</p>
+        </li>
+        <li data-layerurl="http://gis.devgateway.org/arcgis/rest/services//wbi/North_America/MapServer/12/query">
+          <h2>USA</h2>
+          <a href="#show-layer">show layer</a>
+          <p>Loads way east</p>
+        </li>
+        <li data-layerurl="http://gis.devgateway.org/arcgis/rest/services//wbi/East_Asia_and_the_Pacific/MapServer/16/query">
+          <h2>Kiribati</h2>
+          <a href="#show-layer">show layer</a>
+          <p>Loads way off</p>
         </li>
       </ul>
     </div>
@@ -78,15 +87,18 @@
         });
         currentLayer.addTo(map);
       }
-      // var layerLinks = document.querySelectorAll('[href="#show-layer"]');
+      var layerLinks = document.querySelectorAll('[href="#show-layer"]');
 
 
-      // Array.forEach.call(layerLinks, function(thing) {
-      //   console.log(thing);
-      // });
+      Array.prototype.forEach.call(layerLinks, function(link) {
+        link.onclick = function() {
+          var url = this.parentNode.dataset.layerurl;
+          showLayer(url);
+        };
+      });
       // layerLinks.onclick = function() { console.log('lalala') };
 
-      showLayer('http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query');
+      // showLayer('http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query');
     </script>
   </body>
 </html>
