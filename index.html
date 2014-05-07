@@ -20,10 +20,20 @@
       a {
         color: #f66;
       }
+      a.loading {
+        color: #666;
+      }
+      a.loading:after {
+        content: "...";
+      }
       ul, li {
         margin: 0;
         padding: 0;
         list-style: none;
+      }
+      li {
+        display: inline-block;
+        padding: 1em;
       }
       li h2 {
         font-size: 1.1em;
@@ -47,17 +57,17 @@
         <li data-layerurl="http://gis.devgateway.org/arcgis/rest/services//wbi/Latin_America_and_the_Caribbean/MapServer/10/query">
           <h2>Chile</h2>
           <a href="#show-layer">show layer</a>
-          <p>Toolkit: pans too far west</p>
+          <p>Toolkit pans too far west</p>
         </li>
         <li data-layerurl="http://gis.devgateway.org/arcgis/rest/services//wbi/North_America/MapServer/12/query">
           <h2>USA</h2>
           <a href="#show-layer">show layer</a>
-          <p>Toolkit: pans way east</p>
+          <p>Toolkit pans way east</p>
         </li>
         <li data-layerurl="http://gis.devgateway.org/arcgis/rest/services//wbi/East_Asia_and_the_Pacific/MapServer/16/query">
           <h2>Kiribati</h2>
           <a href="#show-layer">show layer</a>
-          <p>Toolkit: pans way off</p>
+          <p>Toolkit pans way off</p>
         </li>
       </ul>
     </div>
@@ -74,18 +84,14 @@
 
       var currentLayer = null;
 
-      function showLayer(url) {
+      function loadLayer(url) {
         if (currentLayer) {
           map.removeLayer(currentLayer);
         }
         currentLayer = L.esri.featureLayer(url, {style: function() {
           return {color: '#f05'};
-        }}).on('loading', function() {
-          console.log('loading...')
-        }).on('load', function() {
-          console.log('loaded')
-        });
-        currentLayer.addTo(map);
+        }});
+        return currentLayer;
       }
 
       var layerLinks = document.querySelectorAll('[href="#show-layer"]');
@@ -94,7 +100,12 @@
         link.onclick = function(e) {
           e.preventDefault();
           var url = this.parentNode.dataset.layerurl;
-          showLayer(url);
+          loadLayer(url)
+            .on('loading', function() {
+              link.classList.add('loading')
+            }).on('load', function() {
+              link.classList.remove('loading')
+            }).addTo(map);
         };
       });
 
